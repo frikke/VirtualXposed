@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.os.IBinder;
 import android.util.Log;
 import android.util.MergedConfiguration;
+import android.view.DisplayAdjustments;
 
 import com.lody.virtual.client.VClientImpl;
 import com.lody.virtual.client.core.VirtualCore;
@@ -77,8 +78,18 @@ public class TransactionHandlerProxy extends ClientTransactionHandler {
     }
 
     @Override
+    public void handleResumeActivity(ActivityClientRecord record, boolean finalStateRequest, boolean isForward, String reason) {
+        originalHandler.handleResumeActivity(record, finalStateRequest, isForward, reason);
+    }
+
+    @Override
     public void handleStopActivity(IBinder token, boolean show, int configChanges, PendingTransactionActions pendingActions, boolean finalStateRequest, String reason) {
         originalHandler.handleStopActivity(token, show, configChanges, pendingActions, finalStateRequest, reason);
+    }
+
+    @Override
+    public void handleStopActivity(IBinder token, int configChanges, PendingTransactionActions pendingActions, boolean finalStateRequest, String reason) {
+        originalHandler.handleStopActivity(token, configChanges, pendingActions, finalStateRequest, reason);
     }
 
     @Override
@@ -114,6 +125,11 @@ public class TransactionHandlerProxy extends ClientTransactionHandler {
     @Override
     public void handlePictureInPictureModeChanged(IBinder token, boolean isInPipMode, Configuration overrideConfig) {
         originalHandler.handlePictureInPictureModeChanged(token, isInPipMode, overrideConfig);
+    }
+
+    @Override
+    public void handlePictureInPictureRequested(IBinder token) {
+        originalHandler.handlePictureInPictureRequested(token);
     }
 
     @Override
@@ -171,8 +187,18 @@ public class TransactionHandlerProxy extends ClientTransactionHandler {
     }
 
     @Override
+    public void handleStartActivity(ActivityClientRecord r, PendingTransactionActions pendingActions, ActivityOptions options) {
+        originalHandler.handleStartActivity(r, pendingActions, options);
+    }
+
+    @Override
     public void handleStartActivity(ActivityClientRecord r, PendingTransactionActions pendingActions) {
         originalHandler.handleStartActivity(r, pendingActions);
+    }
+
+    @Override
+    public void handleStartActivity(IBinder binder, PendingTransactionActions pendingActions) {
+        originalHandler.handleStartActivity(binder, pendingActions);
     }
 
     @Override
@@ -183,6 +209,11 @@ public class TransactionHandlerProxy extends ClientTransactionHandler {
     @Override
     public void handleConfigurationChanged(Configuration config) {
         originalHandler.handleConfigurationChanged(config);
+    }
+
+    @Override
+    public void handleFixedRotationAdjustments(IBinder token, DisplayAdjustments.FixedRotationAdjustments fixedRotationAdjustments) {
+        originalHandler.handleFixedRotationAdjustments(token, fixedRotationAdjustments);
     }
 
     @Override
@@ -224,6 +255,11 @@ public class TransactionHandlerProxy extends ClientTransactionHandler {
     @Override
     public void handleTopResumedActivityChanged(IBinder arg1, boolean arg2, String arg3) {
         originalHandler.handleTopResumedActivityChanged(arg1, arg2, arg3);
+    }
+
+    @Override
+    public void handleTopResumedActivityChanged(ActivityClientRecord record, boolean arg2, String arg3) {
+        originalHandler.handleTopResumedActivityChanged(record, arg2, arg3);
     }
 
     @Override

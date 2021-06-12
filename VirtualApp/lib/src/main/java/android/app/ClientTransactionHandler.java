@@ -24,6 +24,7 @@ import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.os.IBinder;
 import android.util.MergedConfiguration;
+import android.view.DisplayAdjustments;
 
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,11 @@ public abstract class ClientTransactionHandler {
      */
     public abstract void handleResumeActivity(IBinder token, boolean finalStateRequest,
             boolean isForward, String reason);
+
+    // Android 12
+    public abstract void handleResumeActivity(ActivityThread.ActivityClientRecord record, boolean finalStateRequest,
+                                              boolean isForward, String reason);
+
     /**
      * Stop the activity.
      * @param token Target activity token.
@@ -90,6 +96,11 @@ public abstract class ClientTransactionHandler {
      */
     public abstract void handleStopActivity(IBinder token, boolean show, int configChanges,
             PendingTransactionActions pendingActions, boolean finalStateRequest, String reason);
+
+    // Android 11
+    public abstract void handleStopActivity(IBinder token, int configChanges,
+                                            PendingTransactionActions pendingActions, boolean finalStateRequest, String reason);
+
     /** Report that activity was stopped to server. */
     public abstract void reportStop(PendingTransactionActions pendingActions);
     /** Restart the activity after it was stopped. */
@@ -108,6 +119,10 @@ public abstract class ClientTransactionHandler {
     /** Deliver picture-in-picture mode change notification. */
     public abstract void handlePictureInPictureModeChanged(IBinder token, boolean isInPipMode,
             Configuration overrideConfig);
+
+    // Android 11
+    public abstract void handlePictureInPictureRequested(IBinder token);
+
     /** Update window visibility. */
     public abstract void handleWindowVisibility(IBinder token, boolean show);
     /** Perform activity launch. */
@@ -116,11 +131,24 @@ public abstract class ClientTransactionHandler {
     /** Perform activity start. */
     public abstract void handleStartActivity(ActivityThread.ActivityClientRecord r,
             PendingTransactionActions pendingActions);
+
+    // Android 12
+    /** Perform activity start. */
+    public abstract void handleStartActivity(ActivityThread.ActivityClientRecord r,
+                                             PendingTransactionActions pendingActions, ActivityOptions options);
+
+    // Android 11
+    public abstract void handleStartActivity(IBinder binder,
+                                             PendingTransactionActions pendingActions);
     /** Get package info. */
     public abstract LoadedApk getPackageInfoNoCheck(ApplicationInfo ai,
                                                     CompatibilityInfo compatInfo);
     /** Deliver app configuration change notification. */
     public abstract void handleConfigurationChanged(Configuration config);
+
+    public abstract void handleFixedRotationAdjustments(IBinder token,
+                                                        DisplayAdjustments.FixedRotationAdjustments fixedRotationAdjustments);
+
     /**
      * Get {@link ActivityThread.ActivityClientRecord} instance that corresponds to the
      * provided token.
@@ -165,6 +193,9 @@ public abstract class ClientTransactionHandler {
     public abstract void updatePendingActivityConfiguration(IBinder arg1, Configuration arg2);
 
     public abstract void handleTopResumedActivityChanged(IBinder arg1, boolean arg2, String arg3);
+
+    public abstract void handleTopResumedActivityChanged(ActivityThread.ActivityClientRecord record, boolean arg2, String arg3);
+
 
     /** Count how many activities are launching. */
     public abstract void countLaunchingActivities(int num);
